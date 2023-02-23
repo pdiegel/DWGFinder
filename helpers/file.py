@@ -102,5 +102,5 @@ class DWGFiles:
         file_date = time.ctime(file_ctime)
         file_date_list = file_date.split(' ')
         formatted_file_date = f'{file_date_list[1]} {file_date_list[2]}, \
-{file_date_list[4]}'
+{file_date_list[-1]}'
         return formatted_file_date
