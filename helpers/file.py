@@ -3,9 +3,13 @@ import time
 
 
 class DWGFiles:
+    file_number_length = 8
+
     def __init__(self, file_number) -> None:
         # file_number = dpg.get_value('file_number')
         self.file_number = file_number
+        if not self.verify_file_number():
+            return
         self.year = self.file_number[:2]
         self.month = self.get_month()
         self.short_file_number = self.get_short_file_number()
@@ -14,6 +18,12 @@ class DWGFiles:
         self.file_dict = self.get_file_dict()
         self.formatted_file_list = self.get_formatted_file_list()
         self.newest_file = self.get_newest_file()
+
+    def verify_file_number(self):
+        if len(self.file_number) == DWGFiles.file_number_length:
+            return True
+        else:
+            raise ValueError('Invalid Job Number')
 
     def get_month(self):
         month = self.file_number[2:4]
@@ -56,11 +66,10 @@ class DWGFiles:
 
     def get_file_dict(self):
         file_list = self.get_file_list()
-        file_dict = {file: "" for file in file_list}
-        for file in file_dict:
-            file_date = os.path.getctime(os.path.join(self.file_path, file))
-            formatted_date = time.ctime(file_date)
-            file_dict[file] = formatted_date
+        file_dict = {}
+        for file in file_list:
+            file_date = self.format_date(file)
+            file_dict[file] = file_date
         return file_dict
 
     def get_formatted_file_list(self):
@@ -87,3 +96,11 @@ class DWGFiles:
                 newest_file = file
 
         return newest_file
+
+    def format_date(self, file):
+        file_ctime = os.path.getctime(os.path.join(self.file_path, file))
+        file_date = time.ctime(file_ctime)
+        file_date_list = file_date.split(' ')
+        formatted_file_date = f'{file_date_list[1]} {file_date_list[2]}, \
+{file_date_list[4]}'
+        return formatted_file_date

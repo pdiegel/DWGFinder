@@ -10,11 +10,12 @@ def create_gui():
         default_font = dpg.add_font("sans.ttf", 22)
 
     with dpg.window(label="main", no_title_bar=True,
-                    no_resize=True, no_move=True, autosize=True):
+                    no_resize=True, no_move=True, width=600, height=600):
         dpg.add_text('Enter The File Number')
         dpg.add_input_text(tag='file_number', default_value='FN', width=90)
-        with dpg.group(tag='listbox', parent='main'):
-            create_listbox()
+        dpg.add_text('', tag='status')
+        with dpg.group(tag='listbox'):
+            create_file_listbox()
 
         with dpg.group(horizontal=True):
             dpg.add_button(
@@ -34,15 +35,30 @@ def create_gui():
 
 def clear():
     dpg.set_value('file_number', '')
-    dpg.set_value('file_list', '')
+    dpg.set_value('status', '')
+    clear_file_listbox()
 
 
 def display_file_list():
-    dwg_file = misc.initialize_dwgfile()
+    try:
+        dwg_file = misc.initialize_dwgfile()
+    except ValueError:
+        display_error(misc.get_file_number())
+        return
+
     dpg.delete_item('file_list')
-    create_listbox(items=dwg_file.formatted_file_list)
+    create_file_listbox(items=dwg_file.formatted_file_list)
 
 
-def create_listbox(items=[]):
+def clear_file_listbox():
+    dpg.delete_item('file_list')
+    create_file_listbox()
+
+
+def create_file_listbox(items: list = []):
     dpg.add_listbox(tag='file_list', items=items, num_items=10,
-                    width=500, parent='listbox')
+                    width=570, parent='listbox')
+
+
+def display_error(file_number):
+    dpg.set_value('status', f'Error - File Number {file_number} not found.')

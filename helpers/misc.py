@@ -1,12 +1,19 @@
-from helpers import file
+from helpers import file, gui_functions
 import dearpygui.dearpygui as dpg
 import subprocess
 
 
 def initialize_dwgfile():
-    file_number = dpg.get_value('file_number')
-    dwg_file = file.DWGFiles(file_number)
+    file_number = get_file_number()
+    try:
+        dwg_file = file.DWGFiles(file_number)
+    except ValueError:
+        raise ValueError
     return dwg_file
+
+
+def get_file_number():
+    return dpg.get_value('file_number').strip()
 
 
 def open_dwg_with_powershell(file_path, file_name):
@@ -32,8 +39,11 @@ def open_dwg_with_powershell(file_path, file_name):
 
 
 def open_file():
+    selected_file = dpg.get_value('file_list').strip()
+    if not selected_file:
+        gui_functions.display_error(get_file_number())
+        return
     dwg_file = initialize_dwgfile()
-    selected_file = dpg.get_value('file_list')
     file_name = selected_file.split(' | ')[0]
     file_path = dwg_file.get_specific_file_path(file_name)
 
