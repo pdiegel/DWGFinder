@@ -23,7 +23,7 @@ def open_dwg_with_powershell(file_path, file_name):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        universal_newlines=True)
+        universal_newlines=True, shell=True)
 
     # Run multiple PowerShell commands
     powershell.stdin.write(f"cd {file_path}\n")
@@ -45,6 +45,6 @@ def open_file():
         return
     dwg_file = initialize_dwgfile()
     file_name = selected_file.split(' | ')[0]
-    file_path = dwg_file.get_specific_file_path(file_name)
+    file_path = dwg_file.get_file_path(file_name)
 
     open_dwg_with_powershell(file_path, file_name)

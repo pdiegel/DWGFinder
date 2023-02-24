@@ -4,7 +4,7 @@ from helpers import misc
 
 def create_gui():
     dpg.create_context()
-    dpg.create_viewport(title='Existing File Search', width=600, height=600)
+    dpg.create_viewport(title='Existing File Search', width=600, height=500)
 
     with dpg.font_registry():
         default_font = dpg.add_font("sans.ttf", 22)
@@ -12,7 +12,8 @@ def create_gui():
     with dpg.window(label="main", no_title_bar=True,
                     no_resize=True, no_move=True, width=600, height=600):
         dpg.add_text('Enter The File Number')
-        dpg.add_input_text(tag='file_number', default_value='FN', width=90)
+        dpg.add_input_text(tag='file_number',
+                           default_value='', width=90)
         dpg.add_text('', tag='status')
         with dpg.group(tag='listbox'):
             create_file_listbox()
@@ -47,7 +48,10 @@ def display_file_list():
         return
 
     dpg.delete_item('file_list')
-    create_file_listbox(items=dwg_file.formatted_file_list)
+    print(dwg_file.file_dict)
+    file_list = [
+        f'{key} | {dwg_file.file_dict[key][0]}' for key in dwg_file.file_dict]
+    create_file_listbox(items=file_list)
 
 
 def clear_file_listbox():
