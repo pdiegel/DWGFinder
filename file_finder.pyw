@@ -4,6 +4,7 @@ from helpers import gui_functions
 
 
 def main():
+    '''Main function to start the program.'''
     gui_functions.create_gui()
 
 

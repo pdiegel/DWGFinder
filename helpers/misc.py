@@ -1,22 +1,29 @@
-from helpers import file, gui_functions
-import dearpygui.dearpygui as dpg
+'''This module handles all the miscellaneous functions in the program.'''
 import subprocess
+import os.path
+import dearpygui.dearpygui as dpg
+from helpers import file, gui_functions
 
 
-def initialize_dwgfile():
+def initialize_dwgfile() -> file.DWGFiles:
+    '''Initializes and returns a DWGFiles Object.'''
     file_number = get_file_number()
     try:
         dwg_file = file.DWGFiles(file_number)
-    except ValueError:
-        raise ValueError
+    except ValueError as exc:
+        raise exc
     return dwg_file
 
 
-def get_file_number():
+def get_file_number() -> str:
+    '''Retuns the file number from the GUI.'''
     return dpg.get_value('file_number').strip()
 
 
-def open_dwg_with_powershell(file_path, file_name):
+def open_dwg_with_powershell(file_path: os.path, file_name: str) -> None:
+    '''Runs the windows powershell commands to change directory, and
+     open the given DWG file.'''
+
     # Start a new PowerShell process
     powershell = subprocess.Popen(
         ["powershell.exe", "-Command", "-"],
@@ -30,15 +37,10 @@ def open_dwg_with_powershell(file_path, file_name):
     powershell.stdin.write(f'.\\"{file_name}"\n')
     powershell.stdin.write("Exit\n")
 
-    # Get the output of the PowerShell commands
-    output, errors = powershell.communicate()
 
-    # Print the output and errors
-    print(output)
-    print(errors)
-
-
-def open_file():
+def open_file() -> None:
+    '''Opens a DWG file using windows powershell,
+     given the file number.'''
     selected_file = dpg.get_value('file_list').strip()
     if not selected_file:
         gui_functions.display_error(get_file_number())

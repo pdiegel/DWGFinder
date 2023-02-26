@@ -1,8 +1,11 @@
+'''This module creates the main GUI for the DWG File Finder, and handles
+ all the functions that relate to the GUI.'''
 import dearpygui.dearpygui as dpg
 from helpers import misc
 
 
-def create_gui():
+def create_gui() -> None:
+    '''Creates the main GUI of the program.'''
     dpg.create_context()
     dpg.create_viewport(title='Existing File Search', width=600, height=500)
 
@@ -34,13 +37,15 @@ def create_gui():
     dpg.destroy_context()
 
 
-def clear():
+def clear() -> None:
+    '''Clears all values in the GUI.'''
     dpg.set_value('file_number', '')
     dpg.set_value('status', '')
     clear_file_listbox()
 
 
-def display_file_list():
+def display_file_list() -> None:
+    '''Displays the file list to the GUI, with the given file number.'''
     try:
         dwg_file = misc.initialize_dwgfile()
     except ValueError:
@@ -50,19 +55,24 @@ def display_file_list():
     dpg.delete_item('file_list')
     print(dwg_file.file_dict)
     file_list = [
-        f'{key} | {dwg_file.file_dict[key][0]}' for key in dwg_file.file_dict]
+        f'{key} | {value[0]}' for key, value in dwg_file.file_dict.items()]
     create_file_listbox(items=file_list)
 
 
-def clear_file_listbox():
+def clear_file_listbox() -> None:
+    '''Clears the file_list listbox in the GUI.'''
     dpg.delete_item('file_list')
     create_file_listbox()
 
 
-def create_file_listbox(items: list = []):
+def create_file_listbox(items: list = None) -> None:
+    '''Creates the file_list listbox.'''
+    if not items:
+        items = []
     dpg.add_listbox(tag='file_list', items=items, num_items=10,
                     width=570, parent='listbox')
 
 
-def display_error(file_number):
+def display_error(file_number: str) -> None:
+    '''Displays an error message on the GUI.'''
     dpg.set_value('status', f'Error - File Number {file_number} not found.')
