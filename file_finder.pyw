@@ -3,7 +3,7 @@
 from helpers import gui_functions
 
 
-def main():
+def main() -> None:
     '''Main function to start the program.'''
     gui_functions.create_gui()
 
