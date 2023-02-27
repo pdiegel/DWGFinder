@@ -75,7 +75,8 @@ class DWGFiles:
         '''Returns a list of dwg file paths based on the provided file
          number.'''
         file_list = []
-        for (directory, _, files) in os.walk(self.file_directory, topdown=True):
+        for (directory, _, files) in os.walk(self.file_directory,
+                                             topdown=True):
             for file in files:
                 current_file_path = os.path.join(directory, file)
                 is_dwg_file = file.lower().endswith('.dwg')

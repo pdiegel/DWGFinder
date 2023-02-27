@@ -21,15 +21,23 @@ def create_gui() -> None:
         with dpg.group(tag='listbox'):
             create_file_listbox()
 
+        dpg.add_spacer(height=10)
+
         with dpg.group(horizontal=True):
             dpg.add_button(
                 label="Search", callback=display_file_list, height=60,
-                width=123)
+                width=250)
             dpg.add_button(label="Open", callback=misc.open_file,
-                           height=60, width=123)
-            dpg.add_button(label="Clear", callback=clear, height=60, width=123)
+                           height=60, width=150)
+            dpg.add_button(label="Clear", callback=clear, height=60, width=150)
 
-        dpg.bind_font(default_font)
+    with dpg.theme() as global_theme:
+        with dpg.theme_component(dpg.mvAll):
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding,
+                                3, category=dpg.mvThemeCat_Core)
+
+    dpg.bind_theme(global_theme)
+    dpg.bind_font(default_font)
 
     dpg.setup_dearpygui()
     dpg.show_viewport()
