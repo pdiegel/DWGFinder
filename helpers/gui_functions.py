@@ -1,6 +1,7 @@
 """This module creates the main GUI for the DWG File Finder, and handles
- all the functions that relate to the GUI."""
+all the functions that relate to the GUI."""
 import dearpygui.dearpygui as dpg
+
 from helpers import misc
 
 

@@ -11,7 +11,6 @@ class DWGFiles:
     dwg_path = os.path.join(r"\\server", "dwg")
 
     def __init__(self, file_number: str) -> None:
-        # file_number = dpg.get_value('file_number')
         self.file_number = file_number
         if not self.verify_file_number():
             return
